@@ -7,13 +7,20 @@ public class UDPClient {
 	public static InetAddress ip;
 	public static void main(String[] args) {
 		try {
-			ip = InetAddress.getByName("localhost");
-			//while(true) {
+			ip = InetAddress.getByName("192.168.68.115");
+			//while(true){
 			Scanner in = new Scanner(System.in);
+			
 			System.out.println("Seleccione la cantidad de clientes");
 			int cantidad = in.nextInt();
+			
 			System.out.println("Seleccione el archivo:\n1-100MB\n2-250MB");
 			int archivo = in.nextInt();
+			
+			System.out.println("Se va a inciar la conexion con cada cliente e inmediatamente se comenzara la transferencia del archivo seleccionado");
+			System.out.println("Ingrese 1 para continuar");
+			in.nextInt();
+			
 			String s = cantidad+"-"+archivo;
 			prepararServidor(s);
 			DatagramSocket ds = new DatagramSocket();

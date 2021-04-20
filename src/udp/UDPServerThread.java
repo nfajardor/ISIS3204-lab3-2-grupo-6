@@ -3,7 +3,12 @@ package udp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.MessageDigest;
 
 
 
@@ -12,6 +17,7 @@ public class UDPServerThread extends Thread{
 	public static final String DIR = "F://Users//usuario//Desktop//redes//ISIS3204-lab3-2-grupo-6//src//data//";
 	public static final String MB100 = "100MB.test";
 	public static final String MB250 = "250MB.test";
+	public static final String HASHALG = "MD5";
 	
 	private DatagramSocket ds;
 	private DatagramPacket dp;
@@ -35,6 +41,15 @@ public class UDPServerThread extends Thread{
 		}
 	}
 	
+	public static String encrypt(String ruta) throws Exception{
+		String s = "";
+		Path p;
+		p = Paths.get(ruta);
+		MessageDigest md = MessageDigest.getInstance(HASHALG);
+		s = (new BigInteger(1,md.digest(Files.readAllBytes(p)))).toString();
+		return s;
+	}
+	
 	public void run() {
 		try {
 			ds.receive(dp);
@@ -45,6 +60,11 @@ public class UDPServerThread extends Thread{
 			String route = archivo == 1 ? DIR + MB100 : DIR + MB250;
 			File file = new File(route);
 			FileInputStream fil = new FileInputStream(file);
+			
+			String llave = encrypt(route);
+			System.out.println("El hash de verificacion es: " + llave);
+
+			
 			int i = 0;
 			tiempo = System.currentTimeMillis();
 			while(fil.read(buf) != -1) {

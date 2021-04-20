@@ -2,13 +2,19 @@ package udp;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.math.BigInteger;
 import java.net.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.MessageDigest;
 import java.util.Random;
 
 public class UDPClientThread extends Thread{
-	public static final String DIR = "F://Users//usuario//Desktop//redes//ISIS3204-lab3-2-grupo-6//src//data//";
+	public static final String DIR = "/Users/nico/Desktop/ISIS3204-lab-3/ISIS3204-lab3-2-grupo-6/archivosRecibidos/";
 	public static final String MB100 = "100MB.txt";
 	public static final String MB250 = "250MB.txt";
+	public static final String HASHALG = "MD5";
 	
 	private DatagramSocket ds;
 	private String id;
@@ -16,7 +22,7 @@ public class UDPClientThread extends Thread{
 	private int arch;
 	private int totalClientes;
 	
-	LoggingTester log = new LoggingTester("F://Users//usuario//Desktop//redes//ISIS3204-lab3-2-grupo-6//src//LogsClient//Log_");
+	LoggingTester log = new LoggingTester("/Users/nico/Desktop/ISIS3204-lab-3/ISIS3204-lab3-2-grupo-6/LogsClient/Log_");
 	Long tiempo;
 	
 	
@@ -27,6 +33,15 @@ public class UDPClientThread extends Thread{
 		totalClientes = cantidad;
 		//System.out.println("Client-"+id+" creado");
 
+	}
+	
+	public static String encrypt(String ruta) throws Exception{
+		String s = "";
+		Path p;
+		p = Paths.get(ruta);
+		MessageDigest md = MessageDigest.getInstance(HASHALG);
+		s = (new BigInteger(1,md.digest(Files.readAllBytes(p)))).toString();
+		return s;
 	}
 
 	public synchronized void run() {
@@ -62,7 +77,12 @@ public class UDPClientThread extends Thread{
 			//Se genera el log
 			log.doLogging(ruta, true, elapsedTimeSec,i);
 			fos.flush();
+			
 			System.out.println("Terminao de escribir, se hicieron: " + i + " ciclos");
+			
+			String llave = encrypt(ruta);
+			System.out.println("El hash de verificacion es: " + llave);
+			
 			ds.close();
 		}catch(Exception e) {
 			System.err.println(e.getMessage());
