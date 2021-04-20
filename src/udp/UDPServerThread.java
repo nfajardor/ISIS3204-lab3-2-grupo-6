@@ -5,9 +5,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.*;
 
+
+
 public class UDPServerThread extends Thread{
 
-	public static final String DIR = "C:\\Users\\Nicolás\\Documents\\ISI3204 lab 3 2\\src\\data\\";
+	public static final String DIR = "F://Users//usuario//Desktop//redes//ISIS3204-lab3-2-grupo-6//src//data//";
 	public static final String MB100 = "100MB.test";
 	public static final String MB250 = "250MB.test";
 	
@@ -16,10 +18,14 @@ public class UDPServerThread extends Thread{
 	private byte[] buf;
 	private String id;
 	private int archivo;
+	
+	LoggingTester log = new LoggingTester("F://Users//usuario//Desktop//redes//ISIS3204-lab3-2-grupo-6//src//LogsServer//Log_");
+	Long tiempo;
+	
 	public UDPServerThread(int iD, int fil) {
 		try {
 			ds = new DatagramSocket(6969+iD);
-			buf = new byte[12];
+			buf = new byte[1024];
 			dp = new DatagramPacket(buf, buf.length);
 			id = iD+"";
 			archivo = fil;
@@ -40,11 +46,16 @@ public class UDPServerThread extends Thread{
 			File file = new File(route);
 			FileInputStream fil = new FileInputStream(file);
 			int i = 0;
+			tiempo = System.currentTimeMillis();
 			while(fil.read(buf) != -1) {
 				dp = new DatagramPacket(buf, buf.length, dp.getAddress(), dp.getPort());
 				ds.send(dp);
 				i++;
 			}
+			long elapsedTimeMillis = System.currentTimeMillis()-tiempo;
+			float elapsedTimeSec = elapsedTimeMillis/1000F;
+			//Se genera el log
+			log.doLogging(route, true, elapsedTimeSec,i);
 			String end = "END";
 			System.out.println("Termino de enviar, se hicieron: " + i + " ciclos");
 			buf = end.getBytes();

@@ -6,7 +6,7 @@ import java.net.*;
 import java.util.Random;
 
 public class UDPClientThread extends Thread{
-	public static final String DIR = "C:\\Users\\Nicolás\\Documents\\ISI3204 lab 3 2\\src\\ArchivosRecibidos\\";
+	public static final String DIR = "F://Users//usuario//Desktop//redes//ISIS3204-lab3-2-grupo-6//src//data//";
 	public static final String MB100 = "100MB.txt";
 	public static final String MB250 = "250MB.txt";
 	
@@ -15,6 +15,11 @@ public class UDPClientThread extends Thread{
 	private InetAddress add;
 	private int arch;
 	private int totalClientes;
+	
+	LoggingTester log = new LoggingTester("F://Users//usuario//Desktop//redes//ISIS3204-lab3-2-grupo-6//src//LogsClient//Log_");
+	Long tiempo;
+	
+	
 	public UDPClientThread(String iD, InetAddress address, DatagramSocket socket, int archivo, int cantidad) {
 		arch = archivo;
 		add = address;
@@ -28,7 +33,7 @@ public class UDPClientThread extends Thread{
 		try {
 			DatagramSocket ds = new DatagramSocket();
 			//System.out.println("Client-"+id+" corriendo");
-			byte[] buf = new byte[12];
+			byte[] buf = new byte[10240];
 			Random rand = new Random();
 			int r = rand.nextInt();
 			//System.out.println("El random del cliente-"+id+" es: "+r);
@@ -45,12 +50,17 @@ public class UDPClientThread extends Thread{
 			ds.receive(dp);
 			s = new String(dp.getData(), 0, dp.getLength());
 			int i = 0;
+			tiempo = System.currentTimeMillis();
 			while(!s.contains("END")) {
 				fos.write(buf);
 				ds.receive(dp);
 				s = new String(dp.getData(), 0, dp.getLength());
 				i++;
 			}
+			long elapsedTimeMillis = System.currentTimeMillis()-tiempo;
+			float elapsedTimeSec = elapsedTimeMillis/1000F;
+			//Se genera el log
+			log.doLogging(ruta, true, elapsedTimeSec,i);
 			fos.flush();
 			System.out.println("Terminao de escribir, se hicieron: " + i + " ciclos");
 			ds.close();
