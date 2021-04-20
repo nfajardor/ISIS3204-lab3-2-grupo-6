@@ -43,14 +43,14 @@ public class LoggingTester {
 		try {
 			tamano = Files.size(p);
 			p = p.getFileName();
-			logger.info("Nombre archivo: "+p+" - Tamaño: " + tamano + " bytes");
+			logger.info("Nombre archivo: "+p+" - Tamaï¿½o: " + tamano + " bytes");
 			if(entrega ==true){
-				logger.info("La entrega del archivo fue exitosa.");
+				logger.info("La entrega del archivo termino.");
 			}
 			else{
-				logger.info("La entrega del archivo falló");
+				logger.info("La entrega del archivo fallï¿½");
 			}
-			logger.info("El tiempo que tomó realizar la transferencia fue de: " + tiempoTomado + " segundos.");
+			logger.info("El tiempo que tomï¿½ realizar la transferencia fue de: " + tiempoTomado + " segundos.");
 			logger.info("Se enviaron "+paquetes+" paquetes.");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

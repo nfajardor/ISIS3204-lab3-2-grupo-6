@@ -9,11 +9,14 @@ public class UDPServer {
 			
 			DatagramSocket ds = new DatagramSocket(9999);
 			byte[] buf = new byte[4];
+			
 			DatagramPacket dp = new DatagramPacket(buf, buf.length);
 			ds.receive(dp);
+			
 			String received = new String(dp.getData(), 0, dp.getLength());
 			String[] data = received.split("-");
 			System.out.println("Son "+data[0]+" clientes y el archivo es " + data[1]);
+			
 			int c = Integer.parseInt(data[0]);
 			int arch = Integer.parseInt(data[1]);
 			UDPServerThread[] servs = new UDPServerThread[c];

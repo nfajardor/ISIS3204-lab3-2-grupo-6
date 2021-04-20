@@ -7,7 +7,7 @@ public class UDPClient {
 	public static InetAddress ip;
 	public static void main(String[] args) {
 		try {
-			ip = InetAddress.getByName("192.168.68.115");
+			ip = InetAddress.getByName("localhost");
 			//while(true){
 			Scanner in = new Scanner(System.in);
 			
@@ -23,6 +23,7 @@ public class UDPClient {
 			
 			String s = cantidad+"-"+archivo;
 			prepararServidor(s);
+			
 			DatagramSocket ds = new DatagramSocket();
 			UDPClientThread[] clientes = new UDPClientThread[cantidad];
 			for(int i = 0; i < cantidad; i++) {

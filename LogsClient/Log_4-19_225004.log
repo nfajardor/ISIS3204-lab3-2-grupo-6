@@ -1,0 +1,8 @@
+Apr 19, 2021 10:50:47 PM udp.LoggingTester doLogging
+INFO: Nombre archivo: Cliente0-Prueba-conexiones1 - Tama�o: 90780872 bytes
+Apr 19, 2021 10:50:47 PM udp.LoggingTester doLogging
+INFO: La entrega del archivo fue exitosa.
+Apr 19, 2021 10:50:47 PM udp.LoggingTester doLogging
+INFO: El tiempo que tom� realizar la transferencia fue de: 42.127 segundos.
+Apr 19, 2021 10:50:47 PM udp.LoggingTester doLogging
+INFO: Se enviaron 6983144 paquetes.

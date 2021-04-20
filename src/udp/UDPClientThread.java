@@ -48,30 +48,50 @@ public class UDPClientThread extends Thread{
 		try {
 			DatagramSocket ds = new DatagramSocket();
 			//System.out.println("Client-"+id+" corriendo");
-			byte[] buf = new byte[10240];
+			
+			
+			byte[] buf = new byte[1024];
 			Random rand = new Random();
 			int r = rand.nextInt();
+			
 			//System.out.println("El random del cliente-"+id+" es: "+r);
 			String s = "" + id+"-"+r;
 			buf = s.getBytes();
 			int elId = Integer.parseInt(id);
+			
 			DatagramPacket dp = new DatagramPacket(buf, buf.length, add, 6969 + elId);
+			
 			String received = new String(dp.getData(), 0, dp.getLength());
 			System.out.println("El cliente-"+id+" va a enviar: "+received);
 			ds.send(dp);
 			
-			String ruta = DIR + "Cliente" + id + "-Prueba-" + totalClientes + "-conexiones-tamano-" + (arch == 1 ? MB100 : MB250);
+			String ruta = DIR + "Cliente" + id + "-Prueba-" +  "conexiones" + totalClientes;
 			FileOutputStream fos = new FileOutputStream(new File(ruta));
 			ds.receive(dp);
 			s = new String(dp.getData(), 0, dp.getLength());
+			
+			
 			int i = 0;
 			tiempo = System.currentTimeMillis();
+			
+			
+			
 			while(!s.contains("END")) {
-				fos.write(buf);
+				
+				byte[] bufRecepcion=new byte[1024];
+				
+				dp=new DatagramPacket(bufRecepcion, bufRecepcion.length);
+				
 				ds.receive(dp);
+				
+				fos.write(bufRecepcion);
+				
+				
 				s = new String(dp.getData(), 0, dp.getLength());
+				
 				i++;
 			}
+			
 			long elapsedTimeMillis = System.currentTimeMillis()-tiempo;
 			float elapsedTimeSec = elapsedTimeMillis/1000F;
 			//Se genera el log

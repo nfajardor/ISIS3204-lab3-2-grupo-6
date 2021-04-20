@@ -14,7 +14,7 @@ import java.security.MessageDigest;
 
 public class UDPServerThread extends Thread{
 
-	public static final String DIR = "F://Users//usuario//Desktop//redes//ISIS3204-lab3-2-grupo-6//src//data//";
+	public static final String DIR = "/Users/nico/Desktop/ISIS3204-lab-3/ISIS3204-lab3-2-grupo-6/Data/";
 	public static final String MB100 = "100MB.test";
 	public static final String MB250 = "250MB.test";
 	public static final String HASHALG = "MD5";
@@ -25,7 +25,7 @@ public class UDPServerThread extends Thread{
 	private String id;
 	private int archivo;
 	
-	LoggingTester log = new LoggingTester("F://Users//usuario//Desktop//redes//ISIS3204-lab3-2-grupo-6//src//LogsServer//Log_");
+	LoggingTester log = new LoggingTester("/Users/nico/Desktop/ISIS3204-lab-3/LogsServer/Log_");
 	Long tiempo;
 	
 	public UDPServerThread(int iD, int fil) {
@@ -35,7 +35,10 @@ public class UDPServerThread extends Thread{
 			dp = new DatagramPacket(buf, buf.length);
 			id = iD+"";
 			archivo = fil;
+			
 			System.out.println("Server-"+id+" creado");
+			
+			
 		}catch(Exception e) {
 			System.err.println(e.getMessage());
 		}
@@ -67,11 +70,16 @@ public class UDPServerThread extends Thread{
 			
 			int i = 0;
 			tiempo = System.currentTimeMillis();
+			
+			ds.send(dp);
+			
 			while(fil.read(buf) != -1) {
 				dp = new DatagramPacket(buf, buf.length, dp.getAddress(), dp.getPort());
 				ds.send(dp);
+				
 				i++;
 			}
+			
 			long elapsedTimeMillis = System.currentTimeMillis()-tiempo;
 			float elapsedTimeSec = elapsedTimeMillis/1000F;
 			//Se genera el log
