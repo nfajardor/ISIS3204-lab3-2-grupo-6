@@ -31,7 +31,7 @@ public class UDPServerThread extends Thread{
 	
 	public UDPServerThread(int iD, int fil, String llave) {
 		try {
-			ds = new DatagramSocket(6969);
+			ds = new DatagramSocket(10000+iD);
 			buf = new byte[1024];
 			dp = new DatagramPacket(buf, buf.length);
 			id = iD+"";
