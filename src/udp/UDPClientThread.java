@@ -59,7 +59,7 @@ public class UDPClientThread extends Thread{
 			buf = s.getBytes();
 			int elId = Integer.parseInt(id);
 			
-			DatagramPacket dp = new DatagramPacket(buf, buf.length, add, 6969 + elId);
+			DatagramPacket dp = new DatagramPacket(buf, buf.length, add, 10000 + elId);
 			
 			String received = new String(dp.getData(), 0, dp.getLength());
 			System.out.println("El cliente-"+id+" va a enviar: "+received);
@@ -67,9 +67,10 @@ public class UDPClientThread extends Thread{
 			
 			String ruta = DIR + "Cliente" + id + "-Prueba-" +  "conexiones" + totalClientes;
 			FileOutputStream fos = new FileOutputStream(new File(ruta));
-			ds.receive(dp);
-			s = new String(dp.getData(), 0, dp.getLength());
 			
+			ds.receive(dp);
+			System.out.println("El cliente "+id+" Va a empezar a recibir");
+			s = new String(dp.getData(), 0, dp.getLength());
 			
 			int i = 0;
 			tiempo = System.currentTimeMillis();
@@ -77,6 +78,7 @@ public class UDPClientThread extends Thread{
 			
 			
 			while(!s.contains("END")) {
+				
 				
 				byte[] bufRecepcion=new byte[1024];
 				
@@ -102,6 +104,15 @@ public class UDPClientThread extends Thread{
 			
 			String llave = encrypt(ruta);
 			System.out.println("El hash de verificacion es: " + llave);
+			String llaveServer= s.split("-")[1];
+			
+			if(llaveServer.equals(llave)) {
+				System.out.println("El hash es igual");
+			}else {
+				System.out.println("Los hash no son iguales");
+			}
+			
+			
 			
 			ds.close();
 		}catch(Exception e) {

@@ -1,9 +1,28 @@
 package udp;
 
 
+import java.math.BigInteger;
 import java.net.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.MessageDigest;
 
 public class UDPServer {
+	public static final String DIR = "/home/infracom/ISIS3204-lab3-2-grupo-6/src/data/";
+	public static final String MB100 = "100MB.test";
+	public static final String MB250 = "250MB.test";
+	public static final String HASHALG = "MD5";
+	
+	public static String encrypt(String ruta) throws Exception{
+		String s = "";
+		Path p;
+		p = Paths.get(ruta);
+		MessageDigest md = MessageDigest.getInstance(HASHALG);
+		s = (new BigInteger(1,md.digest(Files.readAllBytes(p)))).toString();
+		return s;
+	}
+	
 	public static synchronized void main(String[] args) {
 		try {
 			
@@ -19,9 +38,16 @@ public class UDPServer {
 			
 			int c = Integer.parseInt(data[0]);
 			int arch = Integer.parseInt(data[1]);
+			
+			
+			String route = arch == 1 ? DIR + MB100 : DIR + MB250;
+			String llave = encrypt(route);
+			
+			
+			
 			UDPServerThread[] servs = new UDPServerThread[c];
 			for(int i = 0; i < c; i++) {
-				servs[i] = new UDPServerThread(i, arch);
+				servs[i] = new UDPServerThread(i, arch, llave);
 			}
 			for(int i = 0; i < c; i++) {
 				servs[i].start();

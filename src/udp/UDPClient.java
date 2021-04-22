@@ -7,7 +7,7 @@ public class UDPClient {
 	public static InetAddress ip;
 	public static void main(String[] args) {
 		try {
-			ip = InetAddress.getByName("localhost");
+			ip = InetAddress.getByName("192.168.68.115");
 			//while(true){
 			Scanner in = new Scanner(System.in);
 			

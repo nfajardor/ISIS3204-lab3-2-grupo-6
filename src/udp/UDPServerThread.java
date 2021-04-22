@@ -14,7 +14,7 @@ import java.security.MessageDigest;
 
 public class UDPServerThread extends Thread{
 
-	public static final String DIR = "/Users/nico/Desktop/ISIS3204-lab-3/ISIS3204-lab3-2-grupo-6/Data/";
+	public static final String DIR = "/home/infracom/ISIS3204-lab3-2-grupo-6/src/data/";
 	public static final String MB100 = "100MB.test";
 	public static final String MB250 = "250MB.test";
 	public static final String HASHALG = "MD5";
@@ -24,17 +24,20 @@ public class UDPServerThread extends Thread{
 	private byte[] buf;
 	private String id;
 	private int archivo;
+	private String llave;
 	
-	LoggingTester log = new LoggingTester("/Users/nico/Desktop/ISIS3204-lab-3/LogsServer/Log_");
+	LoggingTester log = new LoggingTester("/home/infracom/ISIS3204-lab3-2-grupo-6/src/LogsServer/Log_");
 	Long tiempo;
 	
-	public UDPServerThread(int iD, int fil) {
+	public UDPServerThread(int iD, int fil, String llave) {
 		try {
-			ds = new DatagramSocket(6969+iD);
+			ds = new DatagramSocket(6969);
 			buf = new byte[1024];
 			dp = new DatagramPacket(buf, buf.length);
 			id = iD+"";
 			archivo = fil;
+			this.llave = llave;
+			
 			
 			System.out.println("Server-"+id+" creado");
 			
@@ -64,14 +67,11 @@ public class UDPServerThread extends Thread{
 			File file = new File(route);
 			FileInputStream fil = new FileInputStream(file);
 			
-			String llave = encrypt(route);
-			System.out.println("El hash de verificacion es: " + llave);
 
 			
 			int i = 0;
 			tiempo = System.currentTimeMillis();
 			
-			ds.send(dp);
 			
 			while(fil.read(buf) != -1) {
 				dp = new DatagramPacket(buf, buf.length, dp.getAddress(), dp.getPort());
@@ -84,11 +84,13 @@ public class UDPServerThread extends Thread{
 			float elapsedTimeSec = elapsedTimeMillis/1000F;
 			//Se genera el log
 			log.doLogging(route, true, elapsedTimeSec,i);
-			String end = "END";
+			String end = "END -"+ llave;
 			System.out.println("Termino de enviar, se hicieron: " + i + " ciclos");
 			buf = end.getBytes();
 			dp = new DatagramPacket(buf, buf.length, dp.getAddress(), dp.getPort());
 			ds.send(dp);
+			
+			
 			
 		}catch(Exception e) {
 			System.err.println(e.getMessage());
